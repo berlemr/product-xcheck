@@ -13,8 +13,9 @@ from werkzeug.urls import url_parse
 def index():
     return render_template('index.html')
 
-@app.route('/products')
-def product_grid():
+@app.route('/showinventory')
+@login_required
+def inventory_grid():
     # user = {'username': 'Miguel'}
     # return render_template('index.html', title='Home', user=user)
     records = [('a',1),('b',2),('c',3)]
