@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Hi, {{ current_user.username }}!</h1>
+    You can upload your inventory as a .txt or .csv file
+    <form class="form-signin">
+      <input type="file" id="files" name="file" onchange="handleFileSelect(this.files)" multiple
+             style="color:blue">
+    </form>
+
+    <div id="mytext"></div>
+
+    <script>
+      function do_something(txt){
+        //document.getElementById("mytext").innerHTML = txt;
+        var rows = txt.split(/\r?\n/); //split by new lines
+        for(row=0;row<rows.length;row++){
+          var items = rows[row].split(',') //split by comma
+
+          if(items.length != 3){ //because we expect 3 items
+            alert('please fix row ' + row + ' and resubmit')
+            return;
+          };
+        };
+        console.log('file is fine.. post request');
+        //SEND THE POST REQUEST
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST','postinventory',true);
+        //Send the proper header information along with the request
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        xhr.onreadystatechange = function() {//Call a function when the state changes.
+            if(http.readyState == 4 && http.status == 200) {
+                alert(http.responseText);
+            }
+        }
+        xhr.send('data=' + txt);
+      };
+
+      function abortRead(){reader.abort()};
+
+      function errorHandler(evt){
+        switch(evt.target.error.code){
+          case evt.target.error.NOT_FOUND_ERR:
+            alert('file not found');
+            break;
+          case evt.target.error.NOT_READABLE_ERR:
+            alert('file not valid')
+            break;
+          case evt.target.error.ABORT_ERR:
+            break;
+          default:
+            alert('an error occurred reading this file');
+        };
+      };
+
+      function handleFileSelect(files){
+        var count_file = 1;
+
+        for(var i = 0; i < files.length; i++){
+          var file = files[i];
+          reader = new FileReader();
+          reader.onerror = errorHandler;
+          reader.onabort = function(e){alerts('cancelled');};
+
+          reader.onloadend = (function(f) {
+            return function(e) {
+              var content = e.target.result;
+              if(count_file == files.length){
+                do_something(content);
+              };
+              count_file += 1;
+            };
+          })(file);
+        reader.readAsText(file);
+        };
+       };
+    </script>
+
+
+{% endblock %}

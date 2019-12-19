@@ -13,6 +13,17 @@ from werkzeug.urls import url_parse
 def index():
     return render_template('index.html')
 
+@app.route('/inventory_upload')
+@login_required
+def inventory_upload():
+    return render_template('inventory_upload.html')
+
+@app.route('/postinventory', methods = ['POST'])
+def postinventory():
+    jsdata = request.form['data']
+    print(jsdata)
+    return jsdata
+
 @app.route('/showinventory')
 @login_required
 def inventory_grid():

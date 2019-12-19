@@ -2,5 +2,10 @@
 
 {% block content %}
     <h1>Hi, {{ current_user.username }}!</h1>
-    This is a placeholder
+
+    {% if jsdata %}
+        {{ jsdata }}
+    {% else %}
+        This is a placeholder
+    {% endif %}
 {% endblock %}

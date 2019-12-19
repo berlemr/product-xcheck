@@ -41,7 +41,7 @@
                     <div class="sidebar-sticky">
                         <ul class="nav flex-column">
                             <li class="nav-item">
-                                <a class="nav-link active" href="{{url_for('index')}}">
+                                <a class="nav-link active" href="{{url_for('inventory_upload')}}">
                                     <br>
                                     <span data-feather="home"></span>
                                     Update Inventory
@@ -52,6 +52,12 @@
                                 <a class="nav-link" href="{{url_for('inventory_grid')}}">
                                     <span data-feather="file"></span>
                                     Show Inventory
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{url_for('index')}}">
+                                    <span data-feather="file"></span>
+                                    Placeholder
                                 </a>
                             </li>
                         </ul>
