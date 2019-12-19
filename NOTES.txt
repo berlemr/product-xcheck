@@ -1,0 +1,3 @@
+1. modify models.py -> flask db migrate
+2. apply changes to dev db -> flask db upgrade
+3. productionize -> release new version of application to prod server -> flask db upgrade
