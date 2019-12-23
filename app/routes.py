@@ -1,11 +1,10 @@
 from app import app, db
 from flask import render_template, redirect, url_for, flash
-from app.forms import LoginForm, RegistrationForm
+from app.forms import LoginForm, RegistrationForm, InventoryRemove, InventoryAdd
 from flask_login import current_user,login_user, logout_user, login_required
-from app.models import User
+from app.models import User,Inventory
 from flask import request
 from werkzeug.urls import url_parse
-
 
 @app.route('/')
 @app.route('/index')
@@ -21,16 +20,46 @@ def inventory_upload():
 @app.route('/postinventory', methods = ['POST'])
 def postinventory():
     jsdata = request.form['data']
+    user = User.query.filter_by(username=current_user.username).first()
     print(jsdata)
-    return jsdata
+    for line in jsdata.split('|'):
+        elem = line.split(',')
+        i = Inventory(source=elem[0],item=elem[1],price=float(elem[2]),user_id=int(user.id))
+        db.session.add(i)
+    db.session.commit()
+    return('done')
 
-@app.route('/showinventory')
+@app.route('/showinventory', methods=['GET','POST'])
 @login_required
 def inventory_grid():
-    # user = {'username': 'Miguel'}
-    # return render_template('index.html', title='Home', user=user)
-    records = [('a',1),('b',2),('c',3)]
-    return render_template('product_table.html',records=records)
+    user = User.query.filter_by(username=current_user.username).first()
+
+    remove_form = InventoryRemove()
+    if remove_form.validate_on_submit():
+        item_code = remove_form.item_code.data
+        item = Inventory.query.filter_by(id=item_code).first()
+        db.session.delete(item)
+        db.session.commit()
+        return redirect(url_for('inventory_grid'))
+
+    add_form = InventoryAdd()
+    if add_form.validate_on_submit():
+        source = add_form.source.data
+        item = add_form.name.data
+        price = add_form.price.data
+        i = Inventory(source=source,item=item,price=float(price),user_id=int(user.id))
+        db.session.add(i)
+        db.session.commit()
+        return redirect(url_for('inventory_grid'))
+
+    items = Inventory.query.filter_by(user_id=user.id).all()
+    if len(items):
+        records = []
+        for item in items:
+            records.append((item.id,item.source,item.item,item.price))
+    else:
+        records = [(0,'tbd','tbd',0)]
+    return render_template('product_table.html',records=records, remove_form = remove_form, add_form=add_form)
 
 @app.route('/login', methods=['GET','POST'])
 def login():

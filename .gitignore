@@ -132,3 +132,14 @@ dmypy.json
 
 #pycharm stuff
 .idea/
+
+#sqlite
+*.db
+
+#tests
+tests/
+.tests
+.tests/
+tests/*
+logs/
+.logs/

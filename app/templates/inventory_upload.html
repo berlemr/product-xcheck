@@ -33,7 +33,8 @@
                 alert(http.responseText);
             }
         }
-        xhr.send('data=' + txt);
+        var clean_txt = txt.replace(/\r?\n/g,'|')
+        xhr.send('data=' + clean_txt);
       };
 
       function abortRead(){reader.abort()};

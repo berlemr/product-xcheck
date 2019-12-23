@@ -4,28 +4,72 @@
 
     <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.1/css/buttons.dataTables.min.css">
+
     <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 
-    <table id="products" class="display" style="width:100%">
+
+    <form action="" method="post">
+        {{ add_form.hidden_tag() }}
+        <p>
+            {{ add_form.source.label }}
+            {{ add_form.source(size=20) }}
+            {% for error in add_form.source.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+
+            {{ add_form.name.label }}
+            {{ add_form.name(size=20) }}
+            {% for error in add_form.name.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+
+            {{ add_form.price.label }}
+            {{ add_form.price(size=20) }}
+            {% for error in add_form.price.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+            {{ add_form.submit() }}
+        </p>
+    </form>
+
+    <table id="products" class="display nowrap" style="width:100%">
         <thead>
             <tr>
-                <th>product</th>
+                <th>code</th>
+                <th>source</th>
+                <th>item</th>
                 <th>price</th>
             </tr>
         </thead>
         <tbody>
             {% for record in records %}
-                <tr><td>{{ record[0] }}</td><td>{{ record[1] }}</td></tr>
+                <tr><td>{{ record[0] }}</td><td>{{ record[1] }}</td><td>{{ record[2] }}</td><td>{{ record[3] }}</td></tr>
             {% endfor %}
         </tbody>
     </table>
 
-    <script>
-        $(document).ready(function(){
-            $('#products').DataTable();
-        });
-    </script>
+    <form action="" method="post">
+        {{ remove_form.hidden_tag() }}
+        <p>
+            {{ remove_form.item_code.label }}
+            {{ remove_form.item_code(size=32) }}
+            {% for error in remove_form.item_code.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+            {{ remove_form.submit() }}
+        </p>
+    </form>
 
-    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <input type="button" value="button name" onclick=openGoogleAnalytics() />
+
+    <script>
+        function openGoogleAnalytics(){
+            var uri = "https://trends.google.com/trends/explore?q=nut butter&geo=GB"
+            var res = encodeURI(uri);
+            console.log(res);
+            window.open(res);
+            }
+    </script>
 
 {% endblock %}

@@ -22,3 +22,13 @@ class User(UserMixin, db.Model):
 @login.user_loader
 def load_user(id):
     return User.query.get(int(id))
+
+class Inventory(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    source = db.Column(db.String(200))
+    item = db.Column(db.String(200))
+    price = db.Column(db.Numeric)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+    def __repr__(self):
+        return '<Item {}>'.format(self.item)

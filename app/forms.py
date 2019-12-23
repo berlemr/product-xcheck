@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField
+from wtforms import StringField, PasswordField, BooleanField, IntegerField, SubmitField, DecimalField
 from wtforms.validators import DataRequired, ValidationError, Email, EqualTo
-from app.models import User
+from app.models import User,Inventory
 
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
@@ -26,3 +26,20 @@ class RegistrationForm(FlaskForm):
         user = User.query.filter_by(email=email.data).first()
         if user is not None:
             raise ValidationError('Please use a different email address.')
+
+class InventoryRemove(FlaskForm):
+    item_code = IntegerField('Item Code', validators=[DataRequired()])
+    submit = SubmitField('Remove')
+
+    def validate_item_code(self, item_code):
+        item = Inventory.query.filter_by(id=item_code.data).first()
+        if item is None:
+            raise ValidationError('this is not a valid code')
+        if not isinstance(item_code.data,int):
+            raise ValidationError('this needs to be a whole number')
+
+class InventoryAdd(FlaskForm):
+    source = StringField('Source', validators=[DataRequired()])
+    name = StringField('Item Name', validators=[DataRequired()])
+    price = DecimalField('Price', validators=[DataRequired()])
+    submit = SubmitField('Add')
