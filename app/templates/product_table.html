@@ -61,15 +61,22 @@
         </p>
     </form>
 
-    <input type="button" value="button name" onclick=openGoogleAnalytics() />
+    <div id="item" style="color:red"></div>
+    <input type="button" value="Google Trends Analysis" onclick=openGoogleAnalytics() />
 
     <script>
         function openGoogleAnalytics(){
-            var uri = "https://trends.google.com/trends/explore?q=nut butter&geo=GB"
-            var res = encodeURI(uri);
-            console.log(res);
-            window.open(res);
+            var item = $('#item');
+            if(item.text() == ''){
+                alert('please select a row')
             }
+            else {
+                var uri = "https://trends.google.com/trends/explore?geo=GB&q=" + item.text();
+                var res = encodeURI(uri);
+                console.log(res);
+                window.open(res);
+            };
+        }
     </script>
 
 {% endblock %}

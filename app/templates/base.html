@@ -88,15 +88,27 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
 
+        <script src="https://cdn.datatables.net/select/1.3.1/js/dataTables.select.min.js"></script>
+
         <script>
-        $(document).ready(function() {
-            $('#products').DataTable( {
-                dom: 'Bfrtip',
-                buttons: [
-                    'copy', 'csv', 'excel', 'pdf', 'print'
-                ]
+            $(document).ready(function() {
+                var item = $('#item');
+                var table = $('#products').DataTable( {
+                    dom: 'Bfrtip',
+                    buttons: [
+                        'copy', 'csv', 'excel', 'pdf', 'print'
+                    ],
+                    select: true
+
+                } );
+                table
+                .on( 'select', function ( e, dt, type, indexes ) {
+                    var rowData = table.rows( indexes ).data().toArray();
+                    //item.prepend( '<div><b>'+type+' selection</b> - '+JSON.stringify( rowData )+'</div>' );
+                    //item.empty().append('Analyse :' + rowData[0][2]);
+                    item.html(rowData[0][2]);
+                } )
             } );
-        } );
         </script>
 
     </body>
