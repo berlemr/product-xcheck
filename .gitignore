@@ -135,6 +135,7 @@ dmypy.json
 
 #sqlite
 *.db
+app.db
 
 #tests
 tests/
