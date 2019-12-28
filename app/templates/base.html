@@ -13,9 +13,9 @@
         <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 
         {% if title %}
-        <title>{{ title }} - Microblog</title>
+        <title>{{ title }} - Product Research</title>
         {% else %}
-        <title>Welcome to Microblog</title>
+        <title>Welcome to Product Research</title>
         {% endif %}
     </head>
     <body>
@@ -52,6 +52,12 @@
                                 <a class="nav-link" href="{{url_for('inventory_grid')}}">
                                     <span data-feather="file"></span>
                                     Show Inventory
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{url_for('amz_dashboard')}}">
+                                    <span data-feather="file"></span>
+                                    Amazon Best Sellers
                                 </a>
                             </li>
                             <li class="nav-item">
@@ -99,7 +105,6 @@
                         'copy', 'csv', 'excel', 'pdf', 'print'
                     ],
                     select: true
-
                 } );
                 table
                 .on( 'select', function ( e, dt, type, indexes ) {

@@ -38,24 +38,34 @@ class AmzHandler(object):
         return d
 
     def processBestSellers(self,bestsellers):
+        d = {}
+        l = []
         for cob,bestsellers in bestsellers.items():
             for item in bestsellers:
                 try:
                     rank = int(item.find('span',class_='zg-badge-text').text.replace('#',''))
-                    name = item.find('div',class_='p13n-sc-truncate p13n-sc-line-clamp-2').text
+                    item_name = item.find('div',class_='p13n-sc-truncate p13n-sc-line-clamp-2').text.lstrip().rstrip()
                     price = item.find(class_='p13n-sc-price').text.replace('£',''); price = float(price.split(' ')[0]) #lowest price
                     image = item.find('img')['src']
                     link = 'https://www.amazon.co.uk/' + item.find('a',class_='a-link-normal')['href']
-                    print(f'{cob}|{rank}|{name}|{price}|{link}|{image}')
+                    if d.__contains__(item_name):
+                        d[item_name]['data'].append((cob,rank,price))
+                    else:
+                        d[item_name] = {'link':link,'image':image,'data':[(cob,rank,price)]}
+                    # print(f'{cob}|{rank}|{item_name}|{price}|{link}|{image}')
                 except Exception as e:
                     print(e)
+                finally:
+                    if cob == self.cob:
+                        d[item_name]['name'],d[item_name]['current_rank'],d[item_name]['current_price'] = item_name,rank,price
+                        l.append(d[item_name]) #should only include list of items that are in current best seller list
+        return l
 
 def main():
     # for k,v in URLS.items():
     #     a = AmzHandler(k,v)
-    #     # a.retrieve_url()
-    #     bestsellers = a.getBestSellers()
-    #     a.processBestSellers(bestsellers)
+    #     a.retrieve_url()
+
     a = AmzHandler('OUTDOORS',URLS['OUTDOORS'])
     bestsellers = a.getBestSellers()
     a.processBestSellers(bestsellers)
